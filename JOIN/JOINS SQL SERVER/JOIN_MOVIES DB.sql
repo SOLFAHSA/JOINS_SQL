@@ -1,0 +1,78 @@
+
+--1. Mostrar la lista de todas las peliculas indicando si esta en Idioma español o no
+SELECT M.TITLE,L.LANGUAGE_NAME
+ FROM MOVIE M
+ INNER JOIN MOVIE_LANGUAGES ML
+ ON M.MOVIE_ID = ML.MOVIE_ID
+ INNER JOIN LANGUAGE L
+ ON ML.LANGUAGE_ID = L.LANGUAGE_ID
+
+--2.Mostrar el genero(drama, accion, terror, etc) de cada pelicula
+ SELECT M.TITLE,G.GENRE_NAME
+ FROM MOVIE M
+ INNER JOIN MOVIE_GENRES MG
+ ON M.MOVIE_ID = MG.MOVIE_ID
+ INNER JOIN GENRE G
+ ON MG.GENRE_ID = G.GENRE_ID
+ 
+
+--3.Cuales son las 5 compañias productoras de peliculas que tiene mayor aceptacion (votos)
+SELECT top 5 PC.COMPANY_NAME, SUM(M.VOTE_COUNT) AS VOTE_COUNT
+FROM MOVIE M
+INNER JOIN MOVIE_COMPANY MC
+ON M.MOVIE_ID = MC.MOVIE_ID
+INNER JOIN PRODUCTION_COMPANY PC
+ON MC.COMPANY_ID = PC.COMPANY_ID
+GROUP BY PC.COMPANY_NAME
+ORDER BY 2 DESC
+
+--4.Mostrar una lista de las personas que participan en cada pelicula
+SELECT M.TITLE,P.PERSON_NAME
+ FROM MOVIE M
+ INNER JOIN MOVIE_CAST MC
+ ON M.MOVIE_ID = MC.MOVIE_ID
+ INNER JOIN PERSON P
+ ON MC.PERSON_ID = P.PERSON_ID
+
+--5.Mostrar una lista con la cantidad de personas por departamento que cuenta cada compañia productora
+SELECT PC.COMPANY_NAME,D.DEPARTMENT_NAME,COUNT(P.PERSON_NAME)AS TOTAL_PERSON
+FROM PRODUCTION_COMPANY PC
+INNER JOIN MOVIE_COMPANY MC
+ON PC.COMPANY_ID = MC.COMPANY_ID
+LEFT JOIN MOVIE_CREW CR
+ON MC.MOVIE_ID = CR.MOVIE_ID
+LEFT JOIN PERSON P
+ON CR.PERSON_ID = P.PERSON_ID
+LEFT JOIN DEPARTMENT D
+ON CR.DEPARTMENT_ID = D.DEPARTMENT_ID
+GROUP BY PC.COMPANY_NAME,D.DEPARTMENT_NAME
+
+--6.Mostrar las peliculas en las que ha participado las personas como parte del movie_cast
+SELECT M.TITLE,MC.CHARACTER_NAME
+ FROM MOVIE M
+ INNER JOIN MOVIE_CAST MC
+ ON M.MOVIE_ID = MC.MOVIE_ID
+
+--7.Listar los paises donde estan ubicas las compañias productoras
+SELECT COUNTRY_NAME,COMPANY_NAME
+FROM PRODUCTION_COMPANY PC
+INNER JOIN MOVIE_COMPANY MC
+ON PC.COMPANY_ID = MC.COMPANY_ID
+INNER JOIN PRODUCTION_COUNTRY CO
+ON MC.MOVIE_ID = CO.MOVIE_ID
+INNER JOIN COUNTRY C
+ON CO.COUNTRY_ID = C.COUNTRY_ID
+
+--8.Mostrar de la lista de elencos cuantas mujeres participan en una pelicula de drama
+
+
+
+--9.Mostrar la cantidad de idiomas en los que se dobla cada pelicula
+SELECT M.TITLE,L.LANGUAGE_NAME
+ FROM MOVIE M
+ INNER JOIN MOVIE_LANGUAGES ML
+ ON M.MOVIE_ID = ML.MOVIE_ID
+ INNER JOIN LANGUAGE L
+ ON ML.LANGUAGE_ID = L.LANGUAGE_ID
+
+--10.Mostrar las 8 palabras claves mas utilizadas en las peliculas
